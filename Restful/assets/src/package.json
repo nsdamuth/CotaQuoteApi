@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "swagger-autogen": "node ./docs/external/swagger.js && node ./docs/internal/swagger.js",
+    "dev": "npm run swagger-autogen && npm start"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "log4js": "^6.9.1",
+    "postgraphile-plugin-connection-filter": "^2.3.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-ui-express": "^5.0.0",
+    "xml2js": "^0.6.2"
+  }
+}

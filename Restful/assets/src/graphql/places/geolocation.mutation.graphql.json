@@ -1,0 +1,3 @@
+{
+    "query": "mutation MyMutation { createGeolocation( input:) { clientMutationId geolocation { id } } } "
+}

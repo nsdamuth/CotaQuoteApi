@@ -1,0 +1,3 @@
+{
+    "query": "query { allQuotes { nodes { id carrierQuoteNumber cost pickup { zip } dropoff { zip } raw_quote { request { items { type length weight number width class height } } } } } }"
+}

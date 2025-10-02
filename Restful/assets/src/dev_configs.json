@@ -1,0 +1,14 @@
+{
+    "port": 8000,
+    "internalPort": 8001,
+    "logLevel": "info",
+    "swagger": {
+        "host": "http://localhost:8000"
+    },
+    "cota_api": {
+        "host": "http://graph:5000/graphql"
+    },
+    "auth": {
+        "host": "https://auth.cotasure.com/auth"
+    }
+}

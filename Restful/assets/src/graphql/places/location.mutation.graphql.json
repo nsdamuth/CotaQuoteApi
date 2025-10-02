@@ -1,0 +1,3 @@
+{
+    "query": "mutation MyMutation { createLocation( input:) { clientMutationId location { id apo city country county fpo postal province region state zip } } } "
+}

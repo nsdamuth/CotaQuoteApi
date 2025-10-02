@@ -1,0 +1,869 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "Cota Api",
+    "description": "API for managing requests",
+    "contact": {
+      "name": "API Support",
+      "email": "david.lindberg@cotasystems.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://rest.cota.com"
+    }
+  ],
+  "tags": {
+    "tags": [
+      {
+        "name": "Authentication",
+        "description": "Authentication API"
+      },
+      {
+        "name": "Loads",
+        "description": "Loads API"
+      },
+      {
+        "name": "Quotes",
+        "description": "Quotes API"
+      },
+      {
+        "name": "Trips",
+        "description": "Trips API"
+      },
+      {
+        "name": "Contacts",
+        "description": "Contacts API"
+      },
+      {
+        "name": "Carriers",
+        "description": "Carriers API"
+      },
+      {
+        "name": "Company",
+        "description": "Companies API"
+      }
+    ]
+  },
+  "paths": {
+    "(req/api/{version}/class/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/quotes/": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Retrieve quotes.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/num"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get a new quote.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "description": "Data of the quote",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Quote"
+              },
+              "examples": {
+                "quote": {
+                  "$ref": "#/components/examples/Quote"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "(req/api/{version}/quotes/{id}": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get a quote by id.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/quotes/quote_number/{id}": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get a quote by id.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/distance/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/location/": {
+      "get": {
+        "tags": [
+          "Location"
+        ],
+        "summary": "Check if location exists in the database by zip code.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/num"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/location/exists": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/location/ensure": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/geolocation/": {
+      "get": {
+        "tags": [
+          "Geo-Location"
+        ],
+        "summary": "Check if geolocation exists in the database by zip code.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/num"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/geolocation/exists": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "(req/api/{version}/geolocation/search": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "version",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "default": "v1",
+            "description": "The version of the Api."
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Quote": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "carrier_quote_number": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  }
+                }
+              },
+              "shipment": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "object"
+                  },
+                  "properties": {
+                    "type": "object",
+                    "properties": {
+                      "date": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "string"
+                          },
+                          "format": {
+                            "type": "string",
+                            "example": "date"
+                          }
+                        }
+                      },
+                      "pickup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "object"
+                          },
+                          "properties": {
+                            "type": "object",
+                            "properties": {
+                              "zip": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "example": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "required": {
+                            "type": "array",
+                            "example": [
+                              "zip"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "dropoff": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "object"
+                          },
+                          "properties": {
+                            "type": "object",
+                            "properties": {
+                              "zip": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "example": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "required": {
+                            "type": "array",
+                            "example": [
+                              "zip"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "array"
+                  },
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "object"
+                      },
+                      "properties": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "string"
+                              }
+                            }
+                          },
+                          "number": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "number"
+                              }
+                            }
+                          },
+                          "length": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "number"
+                              }
+                            }
+                          },
+                          "width": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "number"
+                              }
+                            }
+                          },
+                          "height": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "number"
+                              }
+                            }
+                          },
+                          "weight": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "number"
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "required": {
+                        "type": "array",
+                        "example": [
+                          "type",
+                          "number",
+                          "length",
+                          "width",
+                          "height",
+                          "weight"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": {
+            "type": "array",
+            "example": [
+              "total_weight",
+              "shipment",
+              "items"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "Contact": {
+        "value": {
+          "contact": {
+            "name": "TestContact",
+            "phone": {
+              "country_code": 1,
+              "extension": 1,
+              "area_code": 555,
+              "phone_number": "1234567"
+            },
+            "email": {
+              "email": "test@gmail.com"
+            },
+            "address": {
+              "address": "12 St N",
+              "address_2": "Ste. 203",
+              "location": {
+                "city": "Atlanta",
+                "state": "Georgia",
+                "zip": "30033"
+              }
+            },
+            "roles": [
+              {
+                "name": "SHIPPER"
+              }
+            ]
+          }
+        }
+      },
+      "ContactUpdate": {
+        "value": {
+          "contact": {
+            "name": "TestContactOne",
+            "phone": {
+              "country_code": 1,
+              "extension": 1,
+              "area_code": 444,
+              "phone_number": "7654321"
+            },
+            "email": {
+              "email": "test123@gmail.com"
+            },
+            "address": {
+              "address": "123 St W",
+              "address_2": "Ste. 204",
+              "location": {
+                "city": "Atlanta",
+                "state": "Georgia",
+                "zip": "30035"
+              }
+            },
+            "roles": [
+              {
+                "name": "CONSIGNEE"
+              }
+            ]
+          }
+        }
+      },
+      "Load": {
+        "value": {
+          "pickup": {
+            "contact_id": "123e4567-e89b-12d3-a456-426614174000",
+            "number": "54321",
+            "date": "2025-03-09",
+            "time": "15:45",
+            "appointment_required": false
+          },
+          "dropoff": {
+            "contact_id": "123e4567-e89b-12d3-a456-426614174001",
+            "number": "12345",
+            "date": "2025-03-25",
+            "time": "16:00",
+            "appointment_required": false
+          },
+          "commodities": [
+            {
+              "name": "Potatoes",
+              "weight": 45.8,
+              "type": "pallet",
+              "quantity": 3,
+              "piece_count": 2,
+              "length": 20,
+              "width": 20,
+              "height": 4,
+              "class": "50"
+            }
+          ],
+          "information": {
+            "po_number": "1234",
+            "bol_number": "4321"
+          }
+        }
+      },
+      "LoadUpdate": {
+        "value": {
+          "status": "AT_SHIPPER",
+          "pickup": {
+            "contact_id": "123e4567-e89b-12d3-a456-426614174000",
+            "number": "54321",
+            "date": "2025-03-09",
+            "time": "15:45",
+            "appointment_required": false
+          },
+          "dropoff": {
+            "contact_id": "123e4567-e89b-12d3-a456-426614174001",
+            "number": "12345",
+            "date": "2025-03-25",
+            "time": "16:00",
+            "appointment_required": false
+          },
+          "commodities": [
+            {
+              "id": "123e4567-e89b-12d3-a456-426614174001",
+              "name": "Chairs",
+              "weight": 45.8,
+              "type": "pallet",
+              "quantity": 3,
+              "piece_count": 2,
+              "length": 20,
+              "width": 20,
+              "height": 30,
+              "class": "50"
+            }
+          ],
+          "rate_items": [
+            {
+              "id": "123e4567-e89b-12d3-a456-426614174001",
+              "rate_type": "flat_rate",
+              "rate": 700
+            }
+          ],
+          "information": {
+            "po_number": "1234-3",
+            "bol_number": "4321-43"
+          }
+        }
+      },
+      "Quote": {
+        "value": {
+          "shipment": {
+            "date": "2025-03-25",
+            "pickup": {
+              "zip": "58102"
+            },
+            "dropoff": {
+              "zip": "58104"
+            }
+          },
+          "items": [
+            {
+              "type": "pallet",
+              "number": 2,
+              "length": 20,
+              "width": 20,
+              "height": 2,
+              "weight": 2
+            }
+          ]
+        }
+      },
+      "Requote": {
+        "value": {
+          "carrier_quote_number": "QWRT4P3752",
+          "shipment": {
+            "date": "2025-03-26",
+            "pickup": {
+              "zip": "58102"
+            },
+            "dropoff": {
+              "zip": "58104"
+            },
+            "company": {
+              "id": "123e4567-e89b-12d3-a456-426614174000"
+            }
+          },
+          "items": [
+            {
+              "type": "pallet",
+              "number": 2,
+              "length": 20,
+              "width": 20,
+              "height": 2,
+              "weight": 5
+            }
+          ]
+        }
+      }
+    },
+    "parameters": {
+      "id": {
+        "name": "id",
+        "in": "path",
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "required": true
+      },
+      "num": {
+        "name": "num",
+        "in": "query",
+        "schema": {
+          "type": "number",
+          "minimum": 1
+        },
+        "description": "Number of objects to request.",
+        "default": 10
+      },
+      "version": {
+        "name": "version",
+        "in": "path",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The version of the Api.",
+        "required": true,
+        "default": "v1"
+      },
+      "name": {
+        "name": "name",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The name of the object."
+      },
+      "role": {
+        "name": "role",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The role of the object."
+      },
+      "status": {
+        "name": "status",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "The status of the object."
+      }
+    },
+    "responses": {
+      "ErrorResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "code": 400,
+                "message": "Bad Request",
+                "details": "Invalid parameter 'id'"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "CotaApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    }
+  },
+  "security": [
+    {
+      "CotaApiKey": []
+    }
+  ]
+}

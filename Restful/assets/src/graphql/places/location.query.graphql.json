@@ -1,0 +1,3 @@
+{
+    "query": "query MyQuery { allLocations(condition:) { nodes { apo city country county fpo postal province region state zip geolocationByGeolocationId { latitude longitude } } } } }"
+}

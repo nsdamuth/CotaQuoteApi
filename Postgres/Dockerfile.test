@@ -1,0 +1,39 @@
+# Add Copyright Information
+FROM postgres:latest
+LABEL maintainer='nick@cotasystem.com'
+ADD VERSION .
+# USER postgres
+
+ENV REACT_APP_DEVMODE true
+
+ARG DOMAIN="localhost"
+ARG API_URL="localhost"
+ARG CLIENT_PORT=3000
+
+RUN apt-get -y update && \
+    apt-get -y dist-upgrade && \
+    apt-get -y upgrade
+
+# On startup Postgres will load the SQL files into the database.
+# COPY ./assets/initdb.sql /docker-entrypoint-initdb.d/
+
+COPY ./assets/ /tmp/
+
+RUN chown postgres:postgres /tmp/*.sql
+RUN chmod 777 /docker-entrypoint-initdb.d
+
+WORKDIR /opt/app
+
+# Retain, but commented out; For troubleshooting
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+# 
+# Retain, but commented out; For altnertive loading in case of a need for post build procedures
+# CMD [ "/tmp/entrypoint.sh" ]
+
+## FOR LOCAL DEV & TESTING
+## BUILD
+# docker build -f Dockerfile.test  -t dev_pg .
+## RUN
+# docker run --name dev_pg -p 5400:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -v "$(pwd)/assets/src/:/opt/app" -v "$(pwd)/assets/module/:/opt/app/src/module" dev_pg
+## START
+# docker exec -u postgres -it dev_pg /bin/bash

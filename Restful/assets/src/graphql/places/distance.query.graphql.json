@@ -1,0 +1,3 @@
+{
+    "query": "query MyQuery { allDistances( condition: ) { nodes { id haversine distance startLocationId startGeolocationId startAddressId endLocationId endGeolocationId endAddressId duration complexity } } }"
+}

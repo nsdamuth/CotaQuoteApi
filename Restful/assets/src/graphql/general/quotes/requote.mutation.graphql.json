@@ -1,0 +1,3 @@
+{
+    "query": "mutation MyMutation { updateQuoteByCarrierQuoteNumber( input: {carrierQuoteNumber: , quotePatch: }) { quote { id } } }"
+}

@@ -1,0 +1,3 @@
+{
+    "query": "query MyQuery { allGeolocations(condition:) { totalCount nodes { id } } }"
+}

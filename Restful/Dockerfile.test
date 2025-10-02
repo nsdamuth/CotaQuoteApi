@@ -1,0 +1,50 @@
+# Add Copyright Information
+# FROM node:13
+FROM node:latest
+LABEL maintainer='nick@cotasystem.com'
+ADD VERSION .
+
+ENV REACT_APP_DEVMODE true
+ENV REACT_APP_DOMAIN "cotasystems.com"
+
+ARG DOMAIN="localhost"
+ARG API_URL="localhost"
+ARG CLIENT_PORT=3000
+
+RUN apt-get -y update && \
+    apt-get -y dist-upgrade && \
+    apt-get -y upgrade
+
+
+WORKDIR /opt/app
+# RUN npm i
+# RUN npm install -g amdefine fetch
+
+# COPY ./assets/entrypoint.sh /opt/app/
+# RUN chmod +x /opt/app/entrypoint.sh
+# RUN echo "\nREACT_APP_API_URL=${API_URL}" >> /opt/app/.env
+# RUN echo "\nREACT_APP_DOMAIN=${DOMAIN}" >> /opt/app/.env
+
+# RUN sed -i "s/PORT\=3000/PORT\=${CLIENT_PORT}/g" /opt/app/package.json
+# RUN sed -i "s/DOMAIN/${DOMAIN}/g" /opt/app/src/Keycloak.js
+# ENTRYPOINT [ "npm" ,"start", "--prefix", "/opt/app/"]
+
+# Add minimizing efforts. Remove components no longer essential to operation. disable apt
+# RUN chmod 0 /usr/bin/apt-get
+
+# Retain, but commented out; For troubleshooting
+ENTRYPOINT ["tail", "-f", "/dev/null"]
+# 
+# Retain, but commented out; For altnertive loading in case of a need for post build procedures
+# CMD [ "/opt/entrypoint.sh" ]
+
+## FOR LOCAL DEV & TESTING
+## BUILD
+# docker build -f Dockerfile.test  -t dev_rest .
+## RUN
+# docker run --name dev_rest -p 8000:8000 -v "$(pwd)/assets/src/:/opt/app" -v "$(pwd)/assets/module/:/opt/app/src/module" dev_rest
+## START
+# docker exec -it dev_rest /bin/bash
+# npm install --legacy-peer-deps
+## START
+# npm run dev

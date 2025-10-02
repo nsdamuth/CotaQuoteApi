@@ -1,0 +1,3 @@
+{
+    "query": "mutation MyMutation { createDistance( input: ) { distance { id } clientMutationId } }"
+}

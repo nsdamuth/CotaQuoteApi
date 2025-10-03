@@ -24,7 +24,11 @@ const determine_distance = async ({args}) => {
     if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {
         chunks[0] = [args?.start, args?.stop]
     } else {
-        chunks = Support.chunk(args?.zips)
+        if (Support.notnull(args?.zips)) {
+            if (args?.zips.length > 0) {
+                chunks = Support.chunk(args?.zips)
+            }
+        }
     }
     let result  = {units: units, units_name: units_name, duration: 0, total_distance: 0, float_distance: 0, ave_complexity: 0, distances: [], haversines: [], complexities: [], raw_time: 0, total_time: 0, haversine: 0, complexity: 0, raw_distance: 0}
     for(let i in chunks) {

@@ -1,3 +1,3 @@
 {
-    "query": "query { allQuotes { nodes { id carrierQuoteNumber cost pickup { zip } dropoff { zip } raw_quote { request { items { type length weight number width class height } } } } } }"
+    "query": "query { allQuotes( condition: ) { nodes { carrierQuoteNumber weight width volume cost co2 distance shipping vendor effective expires transit days pickupDate rawQuote } } }"
 }

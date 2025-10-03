@@ -10,7 +10,7 @@ const api = new ApiAccess();
 
 // QUERY IMPORTS
 const quote_mutation = require('../graphql/general/quotes/new_quote.mutation.graphql.json');
-const quotes_query = require('../graphql/general/quotes/quotes.query.graphql.json')
+const quotes_query = require('../graphql/general/quotes/quote.query.qraphql.json')
 const requote_mutation = require('../graphql/general/quotes/requote.mutation.graphql.json')
 
 exports.quotes = async (req, res, next) => {
@@ -23,7 +23,7 @@ exports.quotes = async (req, res, next) => {
     */
     
     let body = JSON.parse(JSON.stringify(quotes_query)) 
-    body.query	= body.query.replace("allQuotes", 'allQuotes'+api.append_values(req.query))
+    // body.query	= body.query.replace("allQuotes", 'allQuotes'+api.append_values(req.query))
     let response = await api.perform_request(req, res, body)
     res.send(response)
 }
@@ -37,13 +37,20 @@ exports.quote_by_id = async (req, res, next) => {
     #swagger.parameters['$ref'] = ['#/components/parameters/version', '#/components/parameters/id']
     */
     if (req?.originalUrl.includes("quote_number")) {
-        req.params.carrierQuoteNumber = req?.params?.id;
+        req.query.carrierQuoteNumber = req?.params?.id;
         delete req?.params?.id;
     }
-    let body = JSON.parse(JSON.stringify(quotes_query))
-    body.query = body.query.replace("allQuotes", 'allQuotes'+api.append_values(req.params))
-    let response = await api.perform_request(req, res, body)
+    let response = await fetch_quote(req)
+    response?.data?.allQuotes?.nodes.forEach((item, index) => {
+        delete item.rawQuote
+    })
     res.send(response)
+}
+async function fetch_quote(req) {
+    let body = JSON.parse(JSON.stringify(quotes_query))
+    body = api.build_graph(req, body)
+    let response = await api.perform_request(req, undefined, body)
+    return response
 }
 async function get_min_quote_request(quote, res, next) {
     return {}
@@ -52,9 +59,7 @@ async function get_truckload_request(quote, res, next) {
     return {}
 }
 async function get_quote_request(quote, res, next) {
-    console.log("------------ get_quote_request ------------")
-    console.log(quote)
-    console.log(quote?.items)
+    let quote_number = (notnull(quote?.quote_number)) ? quote?.quote_number : quote.carrierQuoteNumber
     if (Array.isArray(quote?.items)) {
         quote?.items.forEach((item, index) => {
                 if (item?.class === undefined) {
@@ -64,7 +69,7 @@ async function get_quote_request(quote, res, next) {
         })
     }
     if (quote?.shipment?.pickup?.zip !== '' && quote?.shipment?.dropoff?.zip !== '') {
-        return await handle_request({request_args: quote, quote_number: quote?.quote_number})
+        return await handle_request({request_args: quote, quote_number: quote_number})
     }
 
     res.send({"error": "Invalid Submission", "error_num": 422})
@@ -216,7 +221,6 @@ async function perform_request(args) {
     return undefined
 }
 function process_response(qr, args) {
-    console.log(qr)
     args = mod_quote(args)
     let base_values = [1.1, 22.15, 0.99, 35.315];
     let ftl_milage = 5.8;
@@ -249,9 +253,6 @@ function process_response(qr, args) {
     qr['total_weight'] = total_weight
     qr['request'] = args
     qr['vendor'] = "abf"
-    console.log(qr)
-    console.log(args)
-    // console.log(mod_quote(args))
     return qr
 }
 function format_request_stops(request, stop, delivery) {
@@ -299,11 +300,17 @@ async function handle_request({request_args, quote_number}) {
     let dropoff_options = request_args?.shipment?.dropoff?.options
     let pickup_options  = request_args?.shipment?.pickup?.options
     let qr = undefined
-    let distance = await Distance.determine_distance({args: {zips: [request_args?.shipment?.pickup?.zip, request_args?.shipment?.dropoff?.zip]}})
+    let zips = []
+    if (notnull(request_args?.shipment?.pickup?.zip)) {
+        zips.push(request_args?.shipment?.pickup?.zip)
+    }
+    if (notnull(request_args?.shipment?.dropoff?.zip)) {
+        zips.push(request_args?.shipment?.dropoff?.zip)
+    }
+    let distance = await Distance.determine_distance({args: {zips: zips}})
     qr = await perform_request(request_args)
     let rate    = get_rate({roles: ["INTERNAL_COTA_USER"]})
     let quote   = undefined
-
     if (qr?.Error === undefined && qr !== undefined) {
         if (qr !== undefined && qr?.quote_id !== undefined) {
             let dropoff = (await Location.ensure_location({args: {query: {zip: qr.dropoff?.zip}}, res: undefined}))?.loc
@@ -328,8 +335,6 @@ async function handle_request({request_args, quote_number}) {
             }
             // quote_args.raw_quote = undefined
             quote_args = removeUndefined(quote_args)
-            console.log("------------- quote_args-----------------")
-            console.log(quote_args)
             if (notnull(request_args?.email)) {
             //     quote_args.email_id     = (await ensure_email({parent: parent, args: {email: request_args.email}, context: context, singular: true}))?.id
             //     send_email({parent: parent, kv: quote_args, args: {type: "quote", code: "quote", to: request_args.email, context: context, singular: true, indirect: true}})
@@ -337,8 +342,7 @@ async function handle_request({request_args, quote_number}) {
             quote = await create_or_update({args: quote_args, quote_number: quote_number})
         } else {
             let quote_args = {cost: request_args?.cost, is_calculated: request_args?.is_calculated}
-            console.log(quote_args)
-            quote = await update_quote(quote_args)
+            // quote = await update_quote(quote_args)
         }
     } else {
         return {id: "-1", _type: "Error", carrier_quote_number: qr?.Error}
@@ -346,15 +350,12 @@ async function handle_request({request_args, quote_number}) {
     return quote
 }
 
-async function create_or_update(args, quote_number) {
+async function create_or_update({args, quote_number}) {
     let quote = undefined
+    console.log(quote_number)
     if (notnull(quote_number)) {
-        console.log("------------------- create_or_update ------------------")
-        console.log(args)
-        quote = await update_quote(args)
+        quote = await update_quote({args: args, quote_number: quote_number})
     } else {
-        console.log("------------------- create_or_update ------------------")
-        console.log(args)
         quote = await create_quote(keysToCamelCase(args?.args))
     }
     return quote
@@ -365,27 +366,16 @@ async function create_quote(args) {
     let response = await api.perform_request(args, undefined, body)
     return response
 }
-async function update_quote(args) {
+async function update_quote({args, quote_number}) {
     let input = await format_update_args({args: args})
     let objargs = input?.objargs
     let ids = input?.ids
-    console.log(args)
     let body    = JSON.parse(JSON.stringify(requote_mutation))
-    let carrierQuoteNumber = args?.carrierQuoteNumber
+    let carrierQuoteNumber = quote_number
     delete args?.carrierQuoteNumber
-    body        = api.build_mutagen({key: {carrierQuoteNumber: carrierQuoteNumber}, body: body, args: args})
-    console.log(body)
+    body        = api.build_mutagen({key: {carrierQuoteNumber: carrierQuoteNumber}, body: body, args: keysToCamelCase(args)})
     let response = await api.perform_request(args, undefined, {"query": body})
-    console.log(response)
     return response
-    // if (Object.keys(ids).length > 0) {
-    //     let body    = JSON.parse(JSON.stringify(requote_mutation))
-    //     body        = api.build_graph({query: {quote: objargs}}, body, undefined)
-    //     console.log(body)
-    //     // let response = await api.perform_request(args, undefined, body)
-    //     return response
-    // }
-    return undefined
 }
 async function format_update_args(args) {
     let quote_number = (args?.carrier_quote_number === undefined) ? args?.carrierQuoteNumber : args?.carrier_quote_number
@@ -441,31 +431,25 @@ exports.requote = async (req, res, next) => {
         }
     }
     */
-    
-    // let quote = JSON.parse(JSON.stringify(req.body))
-    // if(Array.isArray(quote?.items)) {
-    //     quote.total_weight = quote.items.reduce((acc, current) => {
-    //         return acc + (parseFloat(current?.weight) * parseFloat(current?.number))
-    //     }, 0)
-    // }
-    // // extracting the carrier quote number and making the quote a key on the requote object.
-    // let requote_obj = {
-    //     carrier_quote_number: quote?.carrier_quote_number,
-    //     quote: quote
-    // }
-    // let body = JSON.parse(JSON.stringify(requote_mutation)) 
-    // body.query	= body.query.replace("re_quote", 're_quote(data: '+api.toUnquotedJSON(requote_obj)+')')
-    // let response = await api.perform_request(req, res, body)
-    // let quote = req.body
-    // if (Array.isArray(quote?.items)) {
-    //     quote?.items.forEach((item, index) => {
-    //             if (item?.class === undefined) {
-    //                     density = item.weight / (item.length * item.width * item.height)
-    //                     console.log(density)
-    //             }
-    //     })
-    // }
-
-    // res.send(response)
+    let quote = undefined
+    let quote_params = JSON.parse(JSON.stringify(req.body))
+    let quote_number = (notnull(quote_params?.quote_number)) ? quote_params?.quote_number : quote_params.carrierQuoteNumber
+    if (!notnull(quote_number)) {
+        quote_number = req?.params?.id
+    }
+    let original_request = undefined
+    if (notnull(quote_number)) {
+        req.query.carrierQuoteNumber = req?.params?.id;
+        delete req?.params?.id
+        quote = await fetch_quote(req)
+        if (notnull(quote?.data?.allQuotes?.nodes?.[0]?.rawQuote)) {
+            original_request = JSON.parse(quote?.data?.allQuotes?.nodes[0].rawQuote)?.request
+        }
+    }
+    if (notnull(original_request)) {
+        let update_request = await handle_request({request_args: original_request, quote_number: quote_number})
+        res.send(update_request)
+        return
+    }
     res.send({})
 }

@@ -4,6 +4,7 @@ const router = require('express').Router({ mergeParams: true });
 // Expose endpoints to external access.
 router.use('/class', require('./class.js'));
 router.use('/quotes', require('./quotes.js'));
+router.use('/requote', require('./requotes.js'));
 router.use('/distance', require('./distance.js'));
 
 // PLACES

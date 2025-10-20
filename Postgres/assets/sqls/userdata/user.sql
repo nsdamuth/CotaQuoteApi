@@ -36,3 +36,11 @@ BEFORE UPDATE ON
   userdata.cota_user 
 FOR EACH ROW EXECUTE PROCEDURE
   sync_lastmod();
+
+ALTER TABLE general.cota_user
+  ADD CONSTRAINT quote_pickup_id_fkey
+  FOREIGN KEY (email_id) REFERENCES userdata.email_address(id);
+
+ALTER TABLE general.cota_user
+  ADD CONSTRAINT quote_pickup_id_fkey
+  FOREIGN KEY (socials_id) REFERENCES userdata.social_link(id);

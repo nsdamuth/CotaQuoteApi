@@ -6,7 +6,7 @@ const info = require("../doc_properties/info.js")
 const components = require("../doc_properties/components/components.js")
 
 const config = (process.env.REACT_APP_DEVMODE) ? devConfig : configs
-const host = (process.env.REACT_APP_DEVMODE) ? config.swagger.host : `https://rest.${process.env.REACT_APP_DOMAIN}`
+const host = (process.env.REACT_APP_DEVMODE) ? config.swagger.host : `https://api.${process.env.REACT_APP_DOMAIN}`
 
 const doc = {
     info: info,

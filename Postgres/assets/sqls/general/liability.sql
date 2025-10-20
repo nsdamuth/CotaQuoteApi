@@ -1,14 +1,18 @@
-CREATE SCHEMA IF NOT EXISTS places;
+CREATE SCHEMA IF NOT EXISTS general;
 
-CREATE TABLE places.sub_address (
-    id uuid DEFAULT gen_random_uuid() NOT NULL,
+
+CREATE TABLE general.liability (
+    id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     public_id uuid DEFAULT gen_random_uuid(),
     created_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     updated_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     created_by uuid,
     updated_by uuid,
-    sub_address text,
-    note_id uuid,
+    carrier_id uuid,
+    insurance_id uuid,
+    general bigint,
+    cargo bigint,
+    workmens_comp bigint,
     ip text,
     ip_info text,
     created_on character varying(100),
@@ -21,6 +25,6 @@ CREATE TABLE places.sub_address (
 CREATE TRIGGER
   sync_lastmod
 BEFORE UPDATE ON
-  places.sub_address 
+  general.liability 
 FOR EACH ROW EXECUTE PROCEDURE
   sync_lastmod();

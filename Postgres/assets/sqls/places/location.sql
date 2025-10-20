@@ -26,7 +26,9 @@ CREATE TABLE places.location (
     updated_by_external uuid
 );
 
-
+ALTER TABLE ONLY public.location
+    ADD CONSTRAINT fk_geolocation FOREIGN KEY (geolocation_id) REFERENCES public.geolocation(id);
+    
 -- ALTER TABLE ONLY places.location
 --     ADD CONSTRAINT location_pkey PRIMARY KEY (id);
 

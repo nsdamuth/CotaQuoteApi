@@ -1,14 +1,17 @@
-CREATE SCHEMA IF NOT EXISTS places;
+CREATE SCHEMA IF NOT EXISTS userdata;
 
-CREATE TABLE places.sub_address (
+CREATE TABLE userdata.roles (
     id uuid DEFAULT gen_random_uuid() NOT NULL,
     public_id uuid DEFAULT gen_random_uuid(),
     created_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     updated_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
     created_by uuid,
     updated_by uuid,
-    sub_address text,
+    code integer,
+    name text,
+    label text,
     note_id uuid,
+    scope public.scope_type,
     ip text,
     ip_info text,
     created_on character varying(100),
@@ -16,11 +19,3 @@ CREATE TABLE places.sub_address (
     created_by_external uuid,
     updated_by_external uuid
 );
-
-
-CREATE TRIGGER
-  sync_lastmod
-BEFORE UPDATE ON
-  places.sub_address 
-FOR EACH ROW EXECUTE PROCEDURE
-  sync_lastmod();

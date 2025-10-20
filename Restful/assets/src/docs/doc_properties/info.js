@@ -4,6 +4,6 @@ module.exports = {
     description: "API for managing requests",     
     contact: {
         name: 'API Support',
-        email: 'david.lindberg@cotasystems.com'
+        email: 'nick@cotasystems.com'
     }
 }

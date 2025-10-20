@@ -74,6 +74,23 @@ CREATE TABLE general.quote (
     email_count_number bigint
 );
 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+ALTER TABLE general.quote
+  ADD CONSTRAINT quote_location_id_fkey
+  FOREIGN KEY (location_id) REFERENCES general.location(id);
+
+ALTER TABLE general.quote
+  ADD CONSTRAINT quote_company_id_fkey
+  FOREIGN KEY (company_id) REFERENCES general.company(id);
+
+ALTER TABLE general.quote
+  ADD CONSTRAINT quote_pickup_id_fkey
+  FOREIGN KEY (pickup_id) REFERENCES general.stop(id);
+
+ALTER TABLE general.quote
+  ADD CONSTRAINT quote_dropoff_id_fkey
+  FOREIGN KEY (dropoff_id) REFERENCES general.stop(id);
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 

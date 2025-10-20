@@ -1,24 +1,23 @@
-CREATE SCHEMA IF NOT EXISTS general;
+CREATE SCHEMA IF NOT EXISTS userdata;
 
-CREATE TABLE general.notes (
+CREATE TABLE userdata.social_link (
     id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     public_id uuid DEFAULT gen_random_uuid(),
     created_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     created_by uuid,
     updated_by uuid,
-    note_text text,
-    metadata json,
-    web_resource_id uuid,
-    viewable BOOLEAN default true
+    company_id uuid UNIQUE,
+    user_id uuid UNIQUE,
+    twitter text,
+    instagram text,
+    facebook text,
+    linkedin text
 );
 
 CREATE TRIGGER
   sync_lastmod
 BEFORE UPDATE ON
-  general.notes 
+  userdata.social_link 
 FOR EACH ROW EXECUTE PROCEDURE
   sync_lastmod();
-
-  ALTER TABLE ONLY general.notes
-    ADD CONSTRAINT fk_web_resource FOREIGN KEY (web_resource_id) REFERENCES userdata.social_link(id);

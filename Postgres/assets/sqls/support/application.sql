@@ -19,3 +19,6 @@ BEFORE UPDATE ON
   support.applications
 FOR EACH ROW EXECUTE PROCEDURE
   sync_lastmod();
+
+ALTER TABLE ONLY support.applications
+    ADD CONSTRAINT fk_company FOREIGN KEY (company_id) REFERENCES general.company(id);

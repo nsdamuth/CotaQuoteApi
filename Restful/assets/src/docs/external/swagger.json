@@ -6,12 +6,12 @@
     "description": "API for managing requests",
     "contact": {
       "name": "API Support",
-      "email": "david.lindberg@cotasystems.com"
+      "email": "nick@cotasystems.com"
     }
   },
   "servers": [
     {
-      "url": "https://rest.cota.com"
+      "url": "https://api.cota.com"
     }
   ],
   "tags": {
@@ -70,19 +70,26 @@
         }
       }
     },
-    "/api/{version}/quotes/": {
+    "/api/{version}/quotes/{id}": {
       "get": {
         "tags": [
           "Quotes"
         ],
-        "summary": "Retrieve quotes.",
+        "summary": "Get a quote by id.",
         "description": "",
         "parameters": [
           {
             "$ref": "#/components/parameters/version"
           },
           {
-            "$ref": "#/components/parameters/num"
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "name": "carrierQuoteNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -93,7 +100,41 @@
             "description": "Bad Request"
           }
         }
-      },
+      }
+    },
+    "/api/{version}/quotes/quote_number/{id}": {
+      "get": {
+        "tags": [
+          "Quotes"
+        ],
+        "summary": "Get a quote by id.",
+        "description": "",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/version"
+          },
+          {
+            "$ref": "#/components/parameters/id"
+          },
+          {
+            "name": "carrierQuoteNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/{version}/quotes/": {
       "post": {
         "tags": [
           "Quotes"
@@ -131,19 +172,23 @@
         }
       }
     },
-    "/api/{version}/quotes/{id}": {
-      "get": {
+    "/api/{version}/requote/": {
+      "post": {
         "tags": [
           "Quotes"
         ],
-        "summary": "Get a quote by id.",
+        "summary": "Requote an existing quote.",
         "description": "",
         "parameters": [
           {
             "$ref": "#/components/parameters/version"
           },
           {
-            "$ref": "#/components/parameters/id"
+            "name": "carrierQuoteNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -152,23 +197,51 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "description": "Data of the quote",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Quote"
+              },
+              "examples": {
+                "quote": {
+                  "$ref": "#/components/examples/Requote"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/{version}/quotes/quote_number/{id}": {
-      "get": {
+    "/api/{version}/requote/{id}": {
+      "post": {
         "tags": [
           "Quotes"
         ],
-        "summary": "Get a quote by id.",
+        "summary": "Requote an existing quote.",
         "description": "",
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "$ref": "#/components/parameters/version"
           },
           {
-            "$ref": "#/components/parameters/id"
+            "name": "carrierQuoteNumber",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -177,6 +250,22 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        },
+        "requestBody": {
+          "description": "Data of the quote",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Quote"
+              },
+              "examples": {
+                "quote": {
+                  "$ref": "#/components/examples/Requote"
+                }
+              }
+            }
           }
         }
       }

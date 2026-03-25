@@ -1,0 +1,3 @@
+{
+    "query": "query MyQuery { allApplications(condition: ) { totalCount } }"
+}

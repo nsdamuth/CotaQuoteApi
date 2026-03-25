@@ -12,8 +12,9 @@ const logger    = logCon.getLogger()
 const configs                   = require('./configs.json');
 
 // ASSIGNMENTS
-const port            = (configs !== undefined) ? configs.port : 8000;
-const internalPort    = (configs !== undefined) ? configs.internalPort : port + 1;
+const port          = (configs !== undefined) ? configs.port : 8000;
+const internalPort  = (configs !== undefined) ? configs.internalPort : port + 1;
+const api_version   = "v1"
 
 const app = express();
 
@@ -34,9 +35,13 @@ const { check_authenticated } = require('./middleware/authentication.middleware.
     /* #swagger.parameters['version'] = { in: 'path', required: true, default: 'v1', description: 'The version of the Api.' } */
 // )
 app.use((req, res, next) => {
-    console.log('Matched API version:', req.params.version);
-    console.log('Incoming path:', req.originalUrl);
-    next();
+    req.apiVersion = getApiVersion(req);
+    // console.log('Incoming path:', req.headers);
+    if (req.apiVersion !== api_version) {
+        res.sendStatus(403)
+    } else {
+        next();
+    }
 }, check_authenticated, routes);
 
 
@@ -69,3 +74,16 @@ app.listen(port, () => {
 app.listen(internalPort, () => {
     logger.info(`Internal Server Listening at ${internalPort}`);
 });
+
+// utils/getApiVersion.js
+function getApiVersion(req) {
+  // Use cached parsed URL if available; otherwise parse manually
+  const parsed = req._parsedUrl || new URL(req.url, 'http://localhost');
+  const pathname = parsed.pathname || '';
+  
+  const match = pathname.match(/^\/api\/(v[0-9]+)(?:\/|$)/i);
+
+  return match ? match[1] : null;
+}
+
+module.exports = getApiVersion;

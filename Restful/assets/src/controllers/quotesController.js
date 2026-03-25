@@ -68,6 +68,7 @@ async function get_quote_request(quote, res, next) {
                 }
         })
     }
+    console.log("----------------------- get_quote_request ------------------------------")
     if (quote?.shipment?.pickup?.zip !== '' && quote?.shipment?.dropoff?.zip !== '') {
         return await handle_request({request_args: quote, quote_number: quote_number})
     }
@@ -94,6 +95,7 @@ exports.generate_quote = async (req, res, next) => {
         }
     }
     */
+    console.log("--------- GENERATE QUOTE ----------------")
     let quote = req.body
     if (quote?.truckload !== undefined) {
         res.send(await get_truckload_request(req, res, next))
@@ -356,7 +358,7 @@ async function create_or_update({args, quote_number}) {
     if (notnull(quote_number)) {
         quote = await update_quote({args: args, quote_number: quote_number})
     } else {
-        quote = await create_quote(keysToCamelCase(args?.args))
+        quote = await create_quote(keysToCamelCase(args))
     }
     return quote
 }

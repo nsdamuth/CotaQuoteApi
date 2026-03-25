@@ -3,12 +3,12 @@
     "internalPort": 8001,
     "logLevel": "info",
     "swagger": {
-        "host": "https://rest.cotasure.com"
+        "host": "https://api.cotasystems.com"
     },
     "cota_api": {
-        "host": "https://api.cotasure.com/graphql"
+        "host": "https://api.cotasystems.com/graphql"
     },
     "auth": {
-        "host": "https://auth.cotasure.com/auth"
+        "host": "https://auth.cotasystems.com/auth"
     }
 }

@@ -15,10 +15,10 @@ const determine_distance = async ({args}) => {
     let unit_divisor = 1609
     let units = "imperial"
     let units_name = "miles"
-    if (args.units === "kilometers") {
+    if (args.units === "km") {
         unit_divisor = 1
         units = "metric"
-        units_name = "km"
+        units_name = "kilometers"
     }
     let chunks = []
     if (Support.notnull(args?.start) && Support.notnull(args?.stop) && !Support.notnull(args?.zips)) {

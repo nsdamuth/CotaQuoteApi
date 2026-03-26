@@ -77,7 +77,7 @@ const query_google_api = async ({stops, objargs, haversine}) =>{
         // Move to .env file?
         const API_KEY	    = "AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o"
         const units		    = "imperial"
-        let origins		    = stops[0]?.loc?.ity+Support.comma(stops[0]?.loc?.state)+Support.comma(+stops[0]?.loc?.zip)
+        let origins		    = stops[0]?.loc?.city+Support.comma(stops[0]?.loc?.state)+Support.comma(+stops[0]?.loc?.zip)
         let destinations	= stops[1]?.loc?.city+Support.comma(stops[1]?.loc?.state)+Support.comma(+stops[1]?.loc?.zip)
         let format		    = "json"
         let mode            = "driving"

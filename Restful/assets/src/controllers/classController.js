@@ -14,8 +14,8 @@ function determine_class({density}) {
     if (density < 35 && density >= 30) { return 60 }
     if (density < 30 && density >= 22.5) { return 65 }
     if (density < 22.5 && density >= 15) { return 70 }
-    if (density < 13.5 && density >= 12) { return 77.5 }
-    if (density < 12 && density >= 10.5) { return 85 }
+    if (density < 15 && density >= 13.5 ) { return 77.5 }
+    if (density < 13.5 && density >= 12) { return 85 }
     if (density < 12 && density >= 10.5) { return 92.5 }
     if (density < 10.5 && density >= 9) { return 100 }
     if (density < 9 && density >= 8) { return 110 }

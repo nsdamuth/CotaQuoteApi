@@ -133,7 +133,7 @@ async function perform_request(args) {
         request['Acc_PALLET'] = 'Y'
 
         if (notnull(args.value)) {
-            request.DeclaredValue - args.value
+            request.DeclaredValue = args.value
         }
         if (notnull(args.shipment)) {
             if (notnull(args.shipment.date)) {

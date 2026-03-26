@@ -15,7 +15,7 @@ const determine_distance = async ({args}) => {
     let unit_divisor = 1609
     let units = "imperial"
     let units_name = "miles"
-    if (args.units === "km") {
+    if (args.units === "kilometers") {
         unit_divisor = 1
         units = "metric"
         units_name = "km"

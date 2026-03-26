@@ -18,7 +18,7 @@ const determine_distance = async ({args}) => {
     if (args.units === "km") {
         unit_divisor = 1
         units = "metric"
-        units_name = "miles"
+        units_name = "km"
     }
     let chunks = []
     if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {

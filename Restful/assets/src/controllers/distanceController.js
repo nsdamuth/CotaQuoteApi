@@ -15,13 +15,14 @@ const determine_distance = async ({args}) => {
     let unit_divisor = 1609
     let units = "imperial"
     let units_name = "miles"
-    if (args.units === "km") {
+    if (args.units === "kilometers") {
         unit_divisor = 1
         units = "metric"
-        units_name = "miles"
+        units_name = "km"
     }
     let chunks = []
-    if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {
+    if (Support.notnull(args?.start) && Support.notnull(args?.stop) && !Support.notnull(args?.zips)) {
+    // if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {
         chunks[0] = [args?.start, args?.stop]
     } else {
         if (Support.notnull(args?.zips)) {
@@ -77,7 +78,7 @@ const query_google_api = async ({stops, objargs, haversine}) =>{
         // Move to .env file?
         const API_KEY	    = "AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o"
         const units		    = "imperial"
-        let origins		    = stops[0]?.loc?.ity+Support.comma(stops[0]?.loc?.state)+Support.comma(+stops[0]?.loc?.zip)
+        let origins		    = stops[0]?.loc?.city+Support.comma(stops[0]?.loc?.state)+Support.comma(+stops[0]?.loc?.zip)
         let destinations	= stops[1]?.loc?.city+Support.comma(stops[1]?.loc?.state)+Support.comma(+stops[1]?.loc?.zip)
         let format		    = "json"
         let mode            = "driving"

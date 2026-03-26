@@ -21,7 +21,8 @@ const determine_distance = async ({args}) => {
         units_name = "km"
     }
     let chunks = []
-    if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {
+    if (Support.notnull(args?.start) && Support.notnull(args?.stop) && !Support.notnull(args?.zips)) {
+    // if ((Support.notnull(args?.start) || Support.notnull(args?.stop)) && !Support.notnull(args?.zips)) {
         chunks[0] = [args?.start, args?.stop]
     } else {
         if (Support.notnull(args?.zips)) {

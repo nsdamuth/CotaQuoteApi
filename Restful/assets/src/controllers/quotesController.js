@@ -98,12 +98,12 @@ exports.generate_quote = async (req, res, next) => {
     console.log("--------- GENERATE QUOTE ----------------")
     let quote = req.body
     if (quote?.truckload !== undefined) {
-        res.send(await get_truckload_request(req, res, next))
+        return res.send(await get_truckload_request(req, res, next))
     }
     if (quote?.pallet !== undefined) {
-        res.send(await get_min_quote_request(req, res, next))
+        return res.send(await get_min_quote_request(req, res, next))
     }
-    res.send(await get_quote_request(quote, res, next))
+    return res.send(await get_quote_request(quote, res, next))
 }
 
 async function perform_request(args) {

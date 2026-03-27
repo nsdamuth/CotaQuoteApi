@@ -68,8 +68,7 @@ async function get_quote_request(quote, res, next) {
                 }
         })
     }
-    console.log("----------------------- get_quote_request ------------------------------")
-    if (quote?.shipment?.pickup?.zip !== '' && quote?.shipment?.dropoff?.zip !== '') {
+    if (notnull(quote?.shipment?.pickup?.zip) && notnull(quote?.shipment?.dropoff?.zip)) {
         return await handle_request({request_args: quote, quote_number: quote_number})
     }
 

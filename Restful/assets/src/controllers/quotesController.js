@@ -441,7 +441,7 @@ exports.requote = async (req, res, next) => {
     }
     let original_request = undefined
     if (notnull(quote_number)) {
-        req.query.carrierQuoteNumber = req?.params?.id;
+        req.query.carrierQuoteNumber = quote_number;
         delete req?.params?.id
         quote = await fetch_quote(req)
         if (notnull(quote?.data?.allQuotes?.nodes?.[0]?.rawQuote)) {

@@ -180,6 +180,10 @@ async function perform_request(args) {
                 let commodity_height = (parseInt(obj['height']) * parseInt(obj['number']))
                 temp.total_height = temp.total_height + commodity_height
 
+                /* Note: fix/restapi-009-total-weight-multiplier
+                    Double check if weight is pre-multiplier, and use below if it is now.                
+                 let commodity_weight = (parseInt(obj['weight']) * parseInt(obj['number']))
+                */
                 let commodity_weight = (parseInt(obj['weight']))
                 temp.total_weight = temp.total_weight + commodity_weight
 

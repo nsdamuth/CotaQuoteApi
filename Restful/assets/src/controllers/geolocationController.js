@@ -67,7 +67,7 @@ const ensure_geolocation = async function({args, res}) {
     return await create_geolocation({args: args.query, res: res})
 }
 const expose_ensure_geolocation = async function(req, res, next) {
-    res.send(await ensure_geolocation({args: {req: req, query: req.body}, res: res}))
+    return res.send(await ensure_geolocation({args: {req: req, query: req.body}, res: res}))
 }
 const search_geolocation = async function(req, res, next) {
     /* Note: fix/restapi-012-geolocation-search-empty-handler

@@ -70,7 +70,13 @@ const expose_ensure_geolocation = async function(req, res, next) {
     res.send(await ensure_geolocation({args: {req: req, query: req.body}, res: res}))
 }
 const search_geolocation = async function(req, res, next) {
-
+    /* Note: fix/restapi-012-geolocation-search-empty-handler
+        search_geolocation() is intentionally deferred for later implementation.
+        Current risk: if this route is active and called, the request may hang because no response is sent.
+        When revisiting, either implement the search flow or return an explicit placeholder response
+        such as an empty object or 501 Not Implemented.
+    */
+    return res.status(501).send({error: "Not implemented", error_num: 501})
 }
 const create_geolocation = async({args, res}) => {
     /*

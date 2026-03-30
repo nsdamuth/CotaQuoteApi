@@ -28,7 +28,7 @@ const get_geolocation = async function(req, res, next) {
     }
 }
 const expose_check_location = async function(req, res, next) {
-    res.send(await check_geolocation(req, res))
+    return res.send(await check_geolocation(req, res))
 }
 const check_geolocation = async function(req, res, next) {
     /*

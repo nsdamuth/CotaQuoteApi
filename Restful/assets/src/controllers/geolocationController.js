@@ -24,11 +24,11 @@ const get_geolocation = async function(req, res, next) {
         const firstKey = Object.keys(response?.data)[0];
         return res.send(response?.data[firstKey])
     } else {
-        res.send({})
+        return res.send({})
     }
 }
 const expose_check_location = async function(req, res, next) {
-    res.send(await check_geolocation(req, res))
+    return res.send(await check_geolocation(req, res))
 }
 const check_geolocation = async function(req, res, next) {
     /*
@@ -59,6 +59,13 @@ const ensure_geolocation = async function({args, res}) {
     #swagger.summary = "Ensure (create if it does not exist) if location exists in the database by zip code."
     #swagger.parameters['$ref'] = ['#/components/parameters/version', '#/components/parameters/num']
     */
+
+    /* Note: fix/restapi-020-ensure-geolocation-latlong-guard
+        Verify intended behavior when ensure_geolocation() is called without latitude/longitude.
+        Current flow builds check_args from args?.query.latitude and args?.query.longitude
+        and proceeds even if one or both are missing.
+        If missing lat/long should hard-fail, add an upfront guard before check_geolocation().
+    */
     let check_args = {lat: args?.query.latitude, long: args?.query.longitude}
     let loc_exists = await check_geolocation({query: check_args}, res)
     if (loc_exists?.exists) {
@@ -67,10 +74,16 @@ const ensure_geolocation = async function({args, res}) {
     return await create_geolocation({args: args.query, res: res})
 }
 const expose_ensure_geolocation = async function(req, res, next) {
-    res.send(await ensure_geolocation({args: {req: req, query: req.body}, res: res}))
+    return res.send(await ensure_geolocation({args: {req: req, query: req.body}, res: res}))
 }
 const search_geolocation = async function(req, res, next) {
-
+    /* Note: fix/restapi-012-geolocation-search-empty-handler
+        search_geolocation() is intentionally deferred for later implementation.
+        Current risk: if this route is active and called, the request may hang because no response is sent.
+        When revisiting, either implement the search flow or return an explicit placeholder response
+        such as an empty object or 501 Not Implemented.
+    */
+    return res.status(501).send({error: "Not implemented", error_num: 501})
 }
 const create_geolocation = async({args, res}) => {
     /*

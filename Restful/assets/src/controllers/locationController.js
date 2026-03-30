@@ -27,7 +27,7 @@ const ensure_location = async function({args, res}) {
     return await create_location({args: args.query, res: res})
 }
 const expose_ensure_location = async function(req, res, next) {
-    res.send(await ensure_location({args: {req: req, query: req.body}, res: res}))
+    return res.send(await ensure_location({args: {req: req, query: req.body}, res: res}))
 }
 const check_location = async function(req, res) {
     /*
@@ -49,10 +49,15 @@ const check_location = async function(req, res) {
     return {exists: false}
 }
 const expose_check_location = async function(req, res, next) {
-    res.send(await check_location(req, res))
+    return res.send(await check_location(req, res))
 }
 const create_location = async({args, res}) => {
     let geolocation_args = {}
+/* Note: fix/restapi-011-location-create-zip-guard
+   Verify intended behavior when create_location() is called without args.zip.
+   Current behavior may intentionally fall through / return null-like behavior.
+   If missing zip should hard-fail, add an upfront guard before geocode fetch.
+*/
     try {
         // https://maps.googleapis.com/maps/api/geocode/json?address=78613&key=AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o
         let API_KEY = "AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o"
@@ -130,7 +135,7 @@ const get_location = async (req, res, next) => {
         const firstKey = Object.keys(response?.data)[0];
         return res.send(response?.data[firstKey])
     } else {
-        res.send({})
+        return res.send({})
     }
 }
 module.exports = { get_location, ensure_location, check_location, expose_ensure_location, expose_check_location }

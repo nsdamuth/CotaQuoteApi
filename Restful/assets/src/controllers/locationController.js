@@ -135,7 +135,7 @@ const get_location = async (req, res, next) => {
         const firstKey = Object.keys(response?.data)[0];
         return res.send(response?.data[firstKey])
     } else {
-        res.send({})
+        return res.send({})
     }
 }
 module.exports = { get_location, ensure_location, check_location, expose_ensure_location, expose_check_location }

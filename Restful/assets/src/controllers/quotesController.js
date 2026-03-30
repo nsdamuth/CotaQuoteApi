@@ -68,8 +68,7 @@ async function get_quote_request(quote, res, next) {
                 }
         })
     }
-    console.log("----------------------- get_quote_request ------------------------------")
-    if (quote?.shipment?.pickup?.zip !== '' && quote?.shipment?.dropoff?.zip !== '') {
+    if (notnull(quote?.shipment?.pickup?.zip) && notnull(quote?.shipment?.dropoff?.zip)) {
         return await handle_request({request_args: quote, quote_number: quote_number})
     }
 
@@ -181,6 +180,10 @@ async function perform_request(args) {
                 let commodity_height = (parseInt(obj['height']) * parseInt(obj['number']))
                 temp.total_height = temp.total_height + commodity_height
 
+                /* Note: fix/restapi-009-total-weight-multiplier
+                    Double check if weight is pre-multiplier, and use below if it is now.                
+                 let commodity_weight = (parseInt(obj['weight']) * parseInt(obj['number']))
+                */
                 let commodity_weight = (parseInt(obj['weight']))
                 temp.total_weight = temp.total_weight + commodity_weight
 
@@ -263,6 +266,11 @@ function format_request_stops(request, stop, delivery) {
     } else {
         request.ShipZip = stop?.zip
     }
+    /* Note: fix/restapi-010-stop-options-source
+        Verify actual shape of stop passed into format_request_stops().
+        If stop-level options are intended, replace stop.shipment?.pickup?.options with stop?.options.
+        If nested shipment pickup/dropoff options are intentional, leave as-is.
+    */
     if (notnull(stop.shipment?.pickup?.options)) {
         if (delivery) {
             if (notnull(stop.shipment?.pickup?.options?.appointment_required)) {
@@ -441,7 +449,7 @@ exports.requote = async (req, res, next) => {
     }
     let original_request = undefined
     if (notnull(quote_number)) {
-        req.query.carrierQuoteNumber = req?.params?.id;
+        req.query.carrierQuoteNumber = quote_number;
         delete req?.params?.id
         quote = await fetch_quote(req)
         if (notnull(quote?.data?.allQuotes?.nodes?.[0]?.rawQuote)) {

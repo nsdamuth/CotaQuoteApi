@@ -59,6 +59,13 @@ const ensure_geolocation = async function({args, res}) {
     #swagger.summary = "Ensure (create if it does not exist) if location exists in the database by zip code."
     #swagger.parameters['$ref'] = ['#/components/parameters/version', '#/components/parameters/num']
     */
+
+    /* Note: fix/restapi-020-ensure-geolocation-latlong-guard
+        Verify intended behavior when ensure_geolocation() is called without latitude/longitude.
+        Current flow builds check_args from args?.query.latitude and args?.query.longitude
+        and proceeds even if one or both are missing.
+        If missing lat/long should hard-fail, add an upfront guard before check_geolocation().
+    */
     let check_args = {lat: args?.query.latitude, long: args?.query.longitude}
     let loc_exists = await check_geolocation({query: check_args}, res)
     if (loc_exists?.exists) {

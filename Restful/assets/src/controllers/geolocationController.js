@@ -24,7 +24,7 @@ const get_geolocation = async function(req, res, next) {
         const firstKey = Object.keys(response?.data)[0];
         return res.send(response?.data[firstKey])
     } else {
-        res.send({})
+        return res.send({})
     }
 }
 const expose_check_location = async function(req, res, next) {

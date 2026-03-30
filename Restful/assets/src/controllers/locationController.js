@@ -49,7 +49,7 @@ const check_location = async function(req, res) {
     return {exists: false}
 }
 const expose_check_location = async function(req, res, next) {
-    res.send(await check_location(req, res))
+    return res.send(await check_location(req, res))
 }
 const create_location = async({args, res}) => {
     let geolocation_args = {}

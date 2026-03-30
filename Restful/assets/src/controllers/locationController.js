@@ -53,6 +53,11 @@ const expose_check_location = async function(req, res, next) {
 }
 const create_location = async({args, res}) => {
     let geolocation_args = {}
+/* Note: fix/restapi-011-location-create-zip-guard
+   Verify intended behavior when create_location() is called without args.zip.
+   Current behavior may intentionally fall through / return null-like behavior.
+   If missing zip should hard-fail, add an upfront guard before geocode fetch.
+*/
     try {
         // https://maps.googleapis.com/maps/api/geocode/json?address=78613&key=AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o
         let API_KEY = "AIzaSyDc2tRjptiKJ_jxgKo5lZfGkeujFbk7Q-o"

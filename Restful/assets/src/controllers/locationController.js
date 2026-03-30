@@ -27,7 +27,7 @@ const ensure_location = async function({args, res}) {
     return await create_location({args: args.query, res: res})
 }
 const expose_ensure_location = async function(req, res, next) {
-    res.send(await ensure_location({args: {req: req, query: req.body}, res: res}))
+    return res.send(await ensure_location({args: {req: req, query: req.body}, res: res}))
 }
 const check_location = async function(req, res) {
     /*

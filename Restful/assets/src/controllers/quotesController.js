@@ -266,6 +266,11 @@ function format_request_stops(request, stop, delivery) {
     } else {
         request.ShipZip = stop?.zip
     }
+    /* Note: fix/restapi-010-stop-options-source
+        Verify actual shape of stop passed into format_request_stops().
+        If stop-level options are intended, replace stop.shipment?.pickup?.options with stop?.options.
+        If nested shipment pickup/dropoff options are intentional, leave as-is.
+    */
     if (notnull(stop.shipment?.pickup?.options)) {
         if (delivery) {
             if (notnull(stop.shipment?.pickup?.options?.appointment_required)) {
